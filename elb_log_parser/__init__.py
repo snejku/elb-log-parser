@@ -45,6 +45,7 @@ def parse(reader):
 
 def parse_line(log_line):
     response = Response()
+    response.raw_log_line = log_line
 
     response.timestamp = datetime.strptime('%s %s' % (log_line[0].split("T")[0], log_line[0].split("T")[1].split(".")[0]),'%Y-%m-%d %H:%M:%S')
     response.elb_name = log_line[1]
@@ -96,6 +97,7 @@ def parse_user_agent(response, user_agent_str):
 class Response:
     def __init__(self):
         self.timestamp = None
+        self.raw_log_line = None
         self.elb_name = None
         self.elb_client_ip = None
         self.elb_backend_ip = None
