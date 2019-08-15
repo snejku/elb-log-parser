@@ -12,7 +12,7 @@ import csv
 from datetime import datetime
 import logging
 try:
-    from urlparse import urlsplit 
+    from urlparse import urlsplit
 except ImportError:
     from urllib.parse import urlparse, urlsplit
 
@@ -34,22 +34,18 @@ from elb_log_parser.version import __version__  # NOQA
 
 
 def parse(reader):
-    result = []
-
     if isinstance(reader, six.string_types):
         reader = StringIO(reader)
 
     for line in csv.reader(reader, delimiter=' '):
         if len(line) < 2:
             continue
-        result.append(parse_line(line))
-
-    return result
+        yield parse_line(line)
 
 
 def parse_line(log_line):
     response = Response()
-    
+
     response.timestamp = datetime.strptime('%s %s' % (log_line[0].split("T")[0], log_line[0].split("T")[1].split(".")[0]),'%Y-%m-%d %H:%M:%S')
     response.elb_name = log_line[1]
     response.elb_client_ip = log_line[2].split(":")[0]
